@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://cxf.apache.org/jaxws
+	http://cxf.apache.org/schemas/jaxws.xsd">
+
+    <!-- cxf的核心配置  -->
+    <import resource="classpath:META-INF/cxf/cxf.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-extension-jaxws.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+    <!-- 在com.jk下面扫描 @service @Controller、@Repository 等,不好归类的就是用@Component-->
+    <context:component-scan base-package="com.jk"/><!-- *代表扫描整个文件 -->
+    <!-- ↑没有这句话,就不在同一个空间,及不能加载接口  -->
+
+    <!-- endpoint 配置终端 -->
+    <jaxws:endpoint
+            id="WSBookServiceImpl"
+            implementor="com.jk.cxf.impl.WSBookServiceImpl"
+            address="/WSBookServiceImpl">
+        <!-- 配置输入拦截器 -->
+        <jaxws:inInterceptors>
+            <bean class="com.jk.cxf.AuthInterceptor" />
+            <!-- 配置输入日志拦截器：可以不配，我手痒 -->
+            <bean class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
+        </jaxws:inInterceptors>
+    </jaxws:endpoint>
+
+    <!-- <jaxws:endpoint ====================配置终端
+            id="userServiceImpl"=============起个名
+            implementor="包名.类名"============接口实现类名
+            address="/users"=================虚拟路径
+    /> -->
+
+</beans>

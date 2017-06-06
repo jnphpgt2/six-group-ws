@@ -1,0 +1,6 @@
+rootProject.name = 'sixProject'
+include 'six-entity'
+include 'six-mapper'
+include 'six-service'
+include 'six-controller'
+
